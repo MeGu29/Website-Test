@@ -529,14 +529,14 @@ async function buildPDF() {
       page.drawLine({ start: { x: bx + LABEL_W, y: by }, end: { x: bx + LABEL_W, y: by + h }, thickness: LINE_T, color: BLACK });
       // label
       if (twoLineLabel) {
-        page.drawText(twoLineLabel[0], { x: bx + 10, y: y(topY + h/2 - 2), font: helveticaBold, size: 13, color: BLACK });
-        page.drawText(twoLineLabel[1], { x: bx + 10, y: y(topY + h/2 + 14), font: helveticaBold, size: 13, color: BLACK });
+        page.drawText(twoLineLabel[0], { x: bx + 10, y: y(topY + h/2 - 2), font: helveticaBold, size: 11, color: BLACK });
+        page.drawText(twoLineLabel[1], { x: bx + 10, y: y(topY + h/2 + 14), font: helveticaBold, size: 11, color: BLACK });
       } else if (label) {
-        page.drawText(label, { x: bx + 10, y: y(topY + h/2 + 6), font: helveticaBold, size: 13, color: BLACK });
+        page.drawText(label, { x: bx + 10, y: y(topY + h/2 + 6), font: helveticaBold, size: 11, color: BLACK });
       }
       // value
       if (value) {
-        page.drawText(value, { x: bx + LABEL_W + 12, y: y(topY + h/2 + 6), font: helvetica, size: 13, color: BLACK });
+        page.drawText(value, { x: bx + LABEL_W + 12, y: y(topY + h/2 + 6), font: helvetica, size: 11, color: BLACK });
       }
     }
 
@@ -561,8 +561,8 @@ async function buildPDF() {
 
     // ── TITLE ───────────────────────────────────────────────────
     const titleText = 'Kaufbeleg';
-    const titleW = helveticaBold.widthOfTextAtSize(titleText, 24);
-    page.drawText(titleText, { x: TX, y: y(100), font: helveticaBold, size: 24, color: BLACK });
+    const titleW = helveticaBold.widthOfTextAtSize(titleText, 20);
+    page.drawText(titleText, { x: TX, y: y(100), font: helveticaBold, size: 20, color: BLACK });
     page.drawLine({ start: { x: TX, y: y(104) }, end: { x: TX + titleW, y: y(104) }, thickness: 1.5, color: TEAL });
 
     // ── SENDER BLOCK ────────────────────────────────────────────
@@ -573,7 +573,7 @@ async function buildPDF() {
       'E-Mail: kundenservice@notebook-pro.de',
     ];
     senderLines.forEach((line, i) => {
-      page.drawText(line, { x: TX, y: y(136 + i * 16), font: helvetica, size: 12, color: BLACK });
+      page.drawText(line, { x: TX, y: y(136 + i * 16), font: helvetica, size: 10, color: BLACK });
     });
 
     // ── TABLE ROWS ─────────────────────────────────────────────
@@ -628,8 +628,8 @@ async function buildPDF() {
 
     // ── LEGAL TEXT (with bold segments) ─────────────────────────
     const legalStart = sepY + 20;
-    const legalFontSize = 10;
-    const legalLeading = 13.5;
+    const legalFontSize = 8.5;
+    const legalLeading = 12;
 
     // Paragraph 1
     let lY = legalStart;
@@ -657,12 +657,12 @@ async function buildPDF() {
     const footerTop = lY + 28;
     page.drawLine({ start: { x: TX, y: y(footerTop) }, end: { x: TX + TW, y: y(footerTop) }, thickness: 1, color: TEAL });
 
-    page.drawText('Notebook-Pro NPH GmbH', { x: TX, y: y(footerTop + 20), font: helvetica, size: 12, color: BLACK });
-    page.drawText('Eiffestrasse 596',       { x: TX, y: y(footerTop + 34), font: helvetica, size: 12, color: BLACK });
-    page.drawText('20537 Hamburg',          { x: TX, y: y(footerTop + 48), font: helvetica, size: 12, color: BLACK });
+    page.drawText('Notebook-Pro NPH GmbH', { x: TX, y: y(footerTop + 20), font: helvetica, size: 10, color: BLACK });
+    page.drawText('Eiffestrasse 596',       { x: TX, y: y(footerTop + 34), font: helvetica, size: 10, color: BLACK });
+    page.drawText('20537 Hamburg',          { x: TX, y: y(footerTop + 48), font: helvetica, size: 10, color: BLACK });
 
-    page.drawText('Ust-IdNr: DE450639506',   { x: 280, y: y(footerTop + 20), font: helvetica, size: 9, color: BLACK });
-    page.drawText('Steuer-Nr: 43/747/04318', { x: 280, y: y(footerTop + 34), font: helvetica, size: 9, color: BLACK });
+    page.drawText('Ust-IdNr: DE450639506',   { x: 280, y: y(footerTop + 20), font: helvetica, size: 8, color: BLACK });
+    page.drawText('Steuer-Nr: 43/747/04318', { x: 280, y: y(footerTop + 34), font: helvetica, size: 8, color: BLACK });
 
     // ── SAVE & DOWNLOAD ─────────────────────────────────────────
     const pdfBytes = await pdfDoc.save();
