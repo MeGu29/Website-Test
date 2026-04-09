@@ -544,7 +544,7 @@ async function buildPDF() {
     // Teal rounded rectangle with "Notebook-Pro" text
     const logoW = 220;
     const logoH = 38;
-    const logoX = TX;
+    const logoX = TX + TW - logoW;
     const logoTopY = 45;
     // Draw rounded rect (approximate with rectangle + circles at ends)
     const logoRad = logoH / 2;
