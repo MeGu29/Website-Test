@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kaufbeleg – Notebook-Pro NPH GmbH</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
 
@@ -414,15 +413,6 @@ input[type="date"] { cursor: pointer; }
 <div id="toast"></div>
 
 <script>
-// ── EmailJS Konfiguration ─────────────────────────────────────
-// 👉 Diese vier Werte nach der EmailJS-Einrichtung eintragen:
-const EMAILJS_PUBLIC_KEY   = '0DRUFj1KbfjJXqkdD';
-const EMAILJS_SERVICE_ID   = 'service_djerm07';
-const EMAILJS_TEMPLATE_ID  = 'template_aofbes9';
-const EMPFAENGER_EMAIL     = 'josue.eo.rojas@gmail.com';
-
-emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-
 // ── Default date ──────────────────────────────────────────────
 document.getElementById('datum').valueAsDate = new Date();
 
@@ -686,33 +676,7 @@ async function buildPDF() {
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 5000);
 
-    // ── E-Mail via EmailJS mit PDF als Base64 ────────────────────
-    try {
-      const dateiname = `Kaufbeleg_${d.nachname}_${d.datum.replace(/\./g, '-')}.pdf`;
-
-      // PDF als Base64 kodieren
-      let binary = '';
-      const bytes = new Uint8Array(pdfBytes);
-      for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
-      const pdfBase64 = btoa(binary);
-
-      toast('⏳ E-Mail wird versendet…', 'ok');
-
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-        to_email:   EMPFAENGER_EMAIL,
-        kunde_name: `${d.vorname} ${d.nachname}`,
-        artikel:    d.artikel,
-        betrag:     d.betrag,
-        datum:      d.datum,
-        pdf_name:   dateiname,
-        pdf_base64: pdfBase64,
-      });
-
-      toast('✓ PDF erstellt & E-Mail versendet!', 'ok');
-    } catch (mailErr) {
-      console.error('E-Mail Fehler:', mailErr);
-      toast('⚠ PDF erstellt, aber E-Mail fehlgeschlagen: ' + mailErr.message, 'err');
-    }
+    toast('✓ PDF erfolgreich erstellt!', 'ok');
 
   } catch (err) {
     console.error(err);
