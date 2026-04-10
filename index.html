@@ -686,21 +686,17 @@ async function buildPDF() {
     document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 5000);
 
-    // ── PDF zu file.io hochladen & Link per E-Mail senden ────────
+    // ── E-Mail via EmailJS mit PDF als Base64 ────────────────────
     try {
       const dateiname = `Kaufbeleg_${d.nachname}_${d.datum.replace(/\./g, '-')}.pdf`;
 
-      toast('⏳ PDF wird hochgeladen…', 'ok');
-      const formData = new FormData();
-      formData.append('file', new Blob([pdfBytes], { type: 'application/pdf' }), dateiname);
-      formData.append('expires', '14d');
+      // PDF als Base64 kodieren
+      let binary = '';
+      const bytes = new Uint8Array(pdfBytes);
+      for (let i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+      const pdfBase64 = btoa(binary);
 
-      const uploadRes = await fetch('https://file.io', { method: 'POST', body: formData });
-      const uploadData = await uploadRes.json();
-
-      if (!uploadData.success || !uploadData.link) {
-        throw new Error('Upload fehlgeschlagen: ' + (uploadData.message || 'Unbekannter Fehler'));
-      }
+      toast('⏳ E-Mail wird versendet…', 'ok');
 
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
         to_email:   EMPFAENGER_EMAIL,
@@ -709,7 +705,7 @@ async function buildPDF() {
         betrag:     d.betrag,
         datum:      d.datum,
         pdf_name:   dateiname,
-        pdf_link:   uploadData.link,
+        pdf_base64: pdfBase64,
       });
 
       toast('✓ PDF erstellt & E-Mail versendet!', 'ok');
