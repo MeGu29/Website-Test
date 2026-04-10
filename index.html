@@ -6,471 +6,191 @@
 <title>Kaufbeleg – Notebook-Pro NPH GmbH</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg:         #0b0d11;
-  --surface:    #13161c;
-  --surface2:   #1a1e27;
-  --border:     #242836;
-  --border-lit: #2e3447;
-  --teal:       #4ecdc4;
-  --teal-glow:  rgba(78,205,196,.18);
-  --teal-dk:    #38b2aa;
-  --text:       #e8eaf0;
-  --muted:      #6b7280;
-  --muted2:     #9ca3af;
-  --err:        #f87171;
-  --err-bg:     rgba(248,113,113,.08);
-  --ok:         #34d399;
-  --ok-bg:      rgba(52,211,153,.08);
-  --radius:     12px;
-  --radius-lg:  20px;
+  --ink:       #1a1a2e;
+  --ink-soft:  #4a4a6a;
+  --accent:    #56b5b5;
+  --accent-dk: #429e9e;
+  --accent-lt: #e6f5f5;
+  --border:    #c8dede;
+  --bg:        #eef6f6;
+  --card:      #ffffff;
+  --radius:    14px;
 }
 
-html { scroll-behavior: smooth; }
-
 body {
-  font-family: 'Inter', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   background: var(--bg);
-  color: var(--text);
+  color: var(--ink);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 20px 100px;
-  position: relative;
-  overflow-x: hidden;
+  padding: 48px 20px 80px;
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(78,205,196,.07) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 40% at 80% 80%, rgba(78,205,196,.04) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(78,205,196,.025) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(78,205,196,.025) 1px, transparent 1px);
-  background-size: 48px 48px;
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ── Hero ────────────────────────────────────────────── */
-.hero {
+/* ── Page header ──────────────────────────────────────────────── */
+.page-header {
   width: 100%;
-  max-width: 900px;
-  padding: 72px 0 52px;
-  position: relative;
-  z-index: 1;
-}
-
-.brand {
-  display: flex;
-  align-items: center;
-  gap: 16px;
+  max-width: 860px;
   margin-bottom: 40px;
-}
-
-.brand-mark {
-  width: 44px;
-  height: 44px;
-  background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dk) 100%);
-  border-radius: 10px;
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 0 20px var(--teal-glow);
+  gap: 22px;
 }
-
-.brand-mark svg { width: 22px; height: 22px; color: #0b0d11; }
-
-.brand-name {
-  font-family: 'Syne', sans-serif;
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: .04em;
-  color: var(--text);
-}
-
-.brand-sub {
-  font-size: .78rem;
-  color: var(--muted);
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  margin-top: 1px;
-}
-
-.status-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(78,205,196,.08);
-  border: 1px solid rgba(78,205,196,.2);
-  border-radius: 40px;
-  padding: 5px 12px 5px 8px;
-  font-size: .72rem;
-  color: var(--teal);
-  letter-spacing: .05em;
-  text-transform: uppercase;
-  font-weight: 600;
-  margin-bottom: 18px;
-}
-
-.status-dot {
-  width: 7px; height: 7px;
-  background: var(--teal);
-  border-radius: 50%;
-  animation: pulse 2s ease infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: .5; transform: scale(.8); }
-}
-
-.hero-title {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(2.4rem, 5vw, 3.6rem);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -.02em;
-  color: var(--text);
-}
-
-.hero-title span { color: var(--teal); }
-
-.hero-subtitle {
-  font-size: .95rem;
-  color: var(--muted2);
-  margin-top: 14px;
-  font-weight: 300;
-}
-
-.steps {
-  display: flex;
-  align-items: center;
-  margin-top: 32px;
-  gap: 0;
-}
-
-.step {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: .78rem;
-  color: var(--muted);
-  font-weight: 500;
-  letter-spacing: .03em;
-  text-transform: uppercase;
-}
-
-.step-num {
-  width: 26px; height: 26px;
-  border-radius: 50%;
-  border: 1.5px solid var(--border-lit);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: .72rem;
-  font-family: 'Syne', sans-serif;
-  font-weight: 700;
+.logo {
   flex-shrink: 0;
 }
-
-.step.active .step-num {
-  background: var(--teal);
-  border-color: var(--teal);
-  color: #0b0d11;
-  box-shadow: 0 0 14px var(--teal-glow);
+.logo svg { height: 54px; width: auto; }
+.page-header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.9rem;
+  color: var(--accent);
+  line-height: 1.1;
+}
+.page-header p {
+  font-size: 1rem;
+  color: var(--ink-soft);
+  margin-top: 4px;
 }
 
-.step.active { color: var(--text); }
-
-.step-line {
-  width: 32px;
-  height: 1px;
-  background: var(--border-lit);
-  margin: 0 6px;
-}
-
-/* ── Card ────────────────────────────────────────────── */
+/* ── Card ─────────────────────────────────────────────────────── */
 .card {
-  background: var(--surface);
+  background: var(--card);
   border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius);
+  padding: 48px 54px;
   width: 100%;
-  max-width: 900px;
-  position: relative;
-  z-index: 1;
-  overflow: hidden;
-  animation: fadeUp .5s ease .1s both;
+  max-width: 860px;
+  box-shadow: 0 6px 32px rgba(0,0,0,.07);
 }
+@media (max-width: 600px) { .card { padding: 28px 20px; } }
 
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(78,205,196,.4), transparent);
-}
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(18px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ── Section ─────────────────────────────────────────── */
-.section {
-  padding: 40px 48px;
-  border-bottom: 1px solid var(--border);
-}
-
-.section:last-child { border-bottom: none; }
-
-@media (max-width: 640px) {
-  .section { padding: 28px 22px; }
-}
-
-.section-head {
-  display: flex;
-  align-items: flex-start;
-  gap: 16px;
-  margin-bottom: 30px;
-}
-
-.section-icon {
-  width: 38px; height: 38px;
-  background: var(--surface2);
-  border: 1px solid var(--border-lit);
-  border-radius: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.section-icon svg { width: 17px; height: 17px; color: var(--teal); }
+/* ── Section ──────────────────────────────────────────────────── */
+.section { margin-bottom: 38px; }
+.section:last-of-type { margin-bottom: 0; }
 
 .section-label {
-  font-family: 'Syne', sans-serif;
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -.01em;
+  font-size: .85rem;
+  font-weight: 600;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 22px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--accent-lt);
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
+.section-label svg { width: 16px; height: 16px; }
 
-.section-desc {
-  font-size: .8rem;
-  color: var(--muted);
-  margin-top: 3px;
-  font-weight: 300;
-}
-
-/* ── Grid ────────────────────────────────────────────── */
-.grid   { display: grid; gap: 18px; }
+/* ── Grid ─────────────────────────────────────────────────────── */
+.grid   { display: grid; gap: 20px; }
 .cols-2 { grid-template-columns: 1fr 1fr; }
+@media (max-width: 520px) { .cols-2 { grid-template-columns: 1fr; } }
 
-@media (max-width: 580px) { .cols-2 { grid-template-columns: 1fr; } }
-
-/* ── Field ───────────────────────────────────────────── */
-.field { display: flex; flex-direction: column; gap: 7px; }
+/* ── Field ────────────────────────────────────────────────────── */
+.field { display: flex; flex-direction: column; gap: 8px; }
 
 label {
-  font-size: .74rem;
-  font-weight: 500;
-  color: var(--muted2);
-  letter-spacing: .07em;
-  text-transform: uppercase;
+  font-size: .88rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  letter-spacing: .02em;
   display: flex;
   align-items: center;
   gap: 5px;
 }
-
-label .req { color: var(--teal); }
-label .opt {
-  font-weight: 400;
-  color: var(--muted);
-  font-size: .85em;
-  text-transform: none;
-  letter-spacing: 0;
-}
+label .req { color: #e05252; font-size: .9em; }
+label .opt { font-weight: 400; color: #aab0c0; font-size: .85em; }
 
 input, textarea {
   padding: 13px 16px;
-  background: var(--surface2);
-  border: 1px solid var(--border-lit);
-  border-radius: var(--radius);
-  font-family: 'Inter', sans-serif;
-  font-size: .95rem;
-  color: var(--text);
-  transition: border-color .2s, box-shadow .2s, background .2s;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.05rem;
+  color: var(--ink);
+  background: #fafbfd;
+  transition: border-color .17s, box-shadow .17s, background .17s;
   outline: none;
   width: 100%;
-  -webkit-appearance: none;
 }
-
-input::placeholder, textarea::placeholder { color: var(--muted); }
-
 input:focus, textarea:focus {
-  border-color: var(--teal);
-  box-shadow: 0 0 0 3px var(--teal-glow);
-  background: #1f2330;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3.5px rgba(86,181,181,.11);
+  background: #fff;
 }
-
-input.invalid {
-  border-color: var(--err);
-  box-shadow: 0 0 0 3px var(--err-bg);
-}
-
-textarea { resize: vertical; min-height: 72px; line-height: 1.6; }
-input[type="date"] { cursor: pointer; color-scheme: dark; }
+input.invalid { border-color: #e05252; box-shadow: 0 0 0 3px rgba(224,82,82,.1); }
+textarea { resize: vertical; min-height: 72px; line-height: 1.5; }
+input[type="date"] { cursor: pointer; }
 
 .field-hint {
-  font-size: .72rem;
-  color: var(--err);
+  font-size: .8rem;
+  color: #e05252;
   display: none;
+  margin-top: 1px;
 }
 .field.has-error .field-hint { display: block; }
 
-/* ── Config sub-group ────────────────────────────────── */
-.config-group-label {
-  font-size: .74rem;
-  font-weight: 500;
-  color: var(--muted2);
-  letter-spacing: .07em;
-  text-transform: uppercase;
-  margin-bottom: 8px;
+/* ── Divider ──────────────────────────────────────────────────── */
+.divider { height: 1px; background: var(--border); margin: 34px 0; }
+
+/* ── Buttons ──────────────────────────────────────────────────── */
+.actions {
   display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.config-group-label .opt {
-  font-weight: 400;
-  color: var(--muted);
-  font-size: .85em;
-  text-transform: none;
-  letter-spacing: 0;
-}
-
-.config-group {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px;
-  display: grid;
-  gap: 10px;
-}
-
-/* ── Actions ─────────────────────────────────────────── */
-.actions-bar {
-  padding: 26px 48px;
-  display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   gap: 12px;
-  background: var(--bg);
-  border-top: 1px solid var(--border);
-}
-
-@media (max-width: 640px) {
-  .actions-bar { padding: 20px 22px; flex-wrap: wrap; }
-}
-
-.actions-info {
-  font-size: .78rem;
-  color: var(--muted);
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  line-height: 1.4;
-}
-
-.actions-info svg { width: 14px; height: 14px; color: var(--teal); flex-shrink: 0; }
-
-.actions-right {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex-shrink: 0;
+  margin-top: 38px;
 }
 
 .btn-reset {
-  padding: 11px 22px;
+  padding: 13px 24px;
   background: transparent;
-  color: var(--muted2);
-  border: 1px solid var(--border-lit);
-  border-radius: var(--radius);
-  font-family: 'Inter', sans-serif;
-  font-size: .88rem;
+  color: var(--ink-soft);
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.02rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all .18s;
+  transition: background .15s, color .15s;
 }
-.btn-reset:hover { background: var(--surface2); color: var(--text); }
+.btn-reset:hover { background: var(--bg); color: var(--ink); }
 
 .btn-generate {
-  padding: 13px 28px;
-  background: var(--teal);
-  color: #0b0d11;
+  padding: 14px 32px;
+  background: var(--accent);
+  color: #fff;
   border: none;
-  border-radius: var(--radius);
-  font-family: 'Syne', sans-serif;
-  font-size: .9rem;
-  font-weight: 700;
-  letter-spacing: .04em;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 600;
   cursor: pointer;
   display: flex;
   align-items: center;
   gap: 9px;
-  transition: all .18s;
-  box-shadow: 0 4px 20px var(--teal-glow);
-  position: relative;
-  overflow: hidden;
+  transition: background .17s, transform .1s, box-shadow .17s;
+  box-shadow: 0 3px 14px rgba(86,181,181,.28);
 }
+.btn-generate:hover  { background: var(--accent-dk); box-shadow: 0 4px 18px rgba(86,181,181,.38); }
+.btn-generate:active { transform: scale(.97); }
+.btn-generate:disabled { background: #9dcfcf; box-shadow: none; cursor: not-allowed; }
+.btn-generate svg { width: 19px; height: 19px; }
 
-.btn-generate::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,.12) 0%, transparent 60%);
-  pointer-events: none;
-}
-
-.btn-generate:hover {
-  background: #5eddd4;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 28px rgba(78,205,196,.35);
-}
-.btn-generate:active { transform: scale(.97) translateY(0); }
-.btn-generate:disabled {
-  background: #2a5a56;
-  color: #4a8a85;
-  box-shadow: none;
-  cursor: not-allowed;
-  transform: none;
-}
-.btn-generate svg { width: 17px; height: 17px; }
-
+/* spinner */
 .spinner {
-  width: 15px; height: 15px;
-  border: 2px solid rgba(0,0,0,.2);
-  border-top-color: #0b0d11;
+  width: 16px; height: 16px;
+  border: 2.5px solid rgba(255,255,255,.35);
+  border-top-color: #fff;
   border-radius: 50%;
   animation: spin .55s linear infinite;
   display: none;
@@ -479,82 +199,134 @@ input[type="date"] { cursor: pointer; color-scheme: dark; }
 .btn-generate.loading .btn-text { display: none; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-/* ── Toast ───────────────────────────────────────────── */
+/* ── Toast ────────────────────────────────────────────────────── */
 #toast {
   position: fixed;
-  bottom: 32px; left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  padding: 12px 24px;
-  border-radius: 40px;
-  font-size: .86rem;
+  bottom: 30px; left: 50%;
+  transform: translateX(-50%) translateY(16px);
+  padding: 11px 22px;
+  border-radius: 10px;
+  font-size: .95rem;
   font-weight: 500;
   opacity: 0;
   pointer-events: none;
-  transition: opacity .25s, transform .25s;
+  transition: opacity .22s, transform .22s;
   white-space: nowrap;
   z-index: 9999;
-  font-family: 'Inter', sans-serif;
-  backdrop-filter: blur(12px);
 }
 #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-#toast.ok  { background: var(--ok-bg); color: var(--ok); border: 1px solid rgba(52,211,153,.25); }
-#toast.err { background: var(--err-bg); color: var(--err); border: 1px solid rgba(248,113,113,.25); }
+#toast.ok  { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
+#toast.err { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
 
-.footer-note {
-  margin-top: 28px;
-  text-align: center;
-  font-size: .74rem;
-  color: var(--muted);
-  z-index: 1;
-  position: relative;
-  line-height: 1.8;
+/* ── Dark-mode toggle ────────────────────────────────────────── */
+.theme-toggle {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 100;
 }
+.theme-toggle svg { width: 18px; height: 18px; color: var(--ink-soft); flex-shrink: 0; }
+.switch {
+  width: 48px;
+  height: 26px;
+  background: var(--border);
+  border-radius: 13px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: background .25s;
+  padding: 0;
+}
+.switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  background: #fff;
+  border-radius: 50%;
+  transition: transform .25s, background .25s;
+  box-shadow: 0 1px 4px rgba(0,0,0,.18);
+}
+.switch.active {
+  background: var(--accent);
+}
+.switch.active::after {
+  transform: translateX(22px);
+}
+
+/* ── Dark mode overrides ─────────────────────────────────────── */
+[data-theme="dark"] {
+  --ink:       #e4e4ec;
+  --ink-soft:  #a0a0b8;
+  --accent:    #56b5b5;
+  --accent-dk: #6dcbcb;
+  --accent-lt: #1e3a3a;
+  --border:    #3a3a50;
+  --bg:        #14141e;
+  --card:      #1e1e2e;
+}
+[data-theme="dark"] input,
+[data-theme="dark"] textarea {
+  background: #26263a;
+  color: #e4e4ec;
+  border-color: var(--border);
+}
+[data-theme="dark"] input:focus,
+[data-theme="dark"] textarea:focus {
+  background: #2e2e44;
+}
+[data-theme="dark"] .btn-reset {
+  color: var(--ink-soft);
+  border-color: var(--border);
+}
+[data-theme="dark"] .btn-reset:hover {
+  background: #26263a;
+  color: var(--ink);
+}
+[data-theme="dark"] .btn-generate:disabled {
+  background: #2a5a5a;
+}
+[data-theme="dark"] #toast.ok  { background: #14532d; color: #86efac; border-color: #166534; }
+[data-theme="dark"] #toast.err { background: #450a0a; color: #fca5a5; border-color: #991b1b; }
+[data-theme="dark"] label .opt { color: #6a6a80; }
+[data-theme="dark"] .logo svg text:last-child { fill: #e4e4ec; }
 </style>
 </head>
 <body>
 
-<div class="hero">
-  <div class="brand">
-    <div class="brand-mark">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-    </div>
-    <div>
-      <div class="brand-name">Notebook-Pro</div>
-      <div class="brand-sub">NPH GmbH · Hamburg</div>
-    </div>
-  </div>
-
-  <div class="status-badge">
-    <span class="status-dot"></span>
-    Kaufbeleg-Generator
-  </div>
-
-  <h1 class="hero-title">Kaufbeleg<br><span>erstellen.</span></h1>
-  <p class="hero-subtitle">Eiffestraße 596, 20537 Hamburg &nbsp;·&nbsp; kundenservice@notebook-pro.de</p>
-
-  <div class="steps">
-    <div class="step active"><span class="step-num">1</span> Kundendaten</div>
-    <div class="step-line"></div>
-    <div class="step active"><span class="step-num">2</span> Kaufdetails</div>
-    <div class="step-line"></div>
-    <div class="step active"><span class="step-num">3</span> PDF generieren</div>
-  </div>
+<div class="theme-toggle">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+  <button class="switch" id="themeSwitch" onclick="toggleTheme()" aria-label="Dark mode umschalten"></button>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
 </div>
+
+<header class="page-header">
+  <div class="logo">
+    <svg viewBox="0 0 320 75" xmlns="http://www.w3.org/2000/svg">
+      <rect x="0" y="0" width="260" height="52" rx="26" fill="#56b5b5"/>
+      <text x="130" y="36" text-anchor="middle" fill="white" font-family="'DM Sans', sans-serif" font-size="28" font-weight="300" letter-spacing="1">Notebook-Pro</text>
+      <text x="130" y="70" text-anchor="middle" fill="#1a1a2e" font-family="'DM Sans', sans-serif" font-size="13" font-weight="400" letter-spacing="0.5">die besten Notebooks für Sie</text>
+    </svg>
+  </div>
+  <div>
+    <h1>Kaufbeleg erstellen</h1>
+    <p>Notebook-Pro NPH GmbH · Eiffestraße 596, 20537 Hamburg</p>
+  </div>
+</header>
 
 <div class="card">
 
   <!-- Kundendaten -->
   <div class="section">
-    <div class="section-head">
-      <div class="section-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      </div>
-      <div>
-        <div class="section-label">Kundendaten</div>
-        <div class="section-desc">Persönliche Informationen des Käufers</div>
-      </div>
+    <div class="section-label">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      Kundendaten
     </div>
-
     <div class="grid cols-2" style="margin-bottom:18px">
       <div class="field" id="fw-vorname">
         <label>Vorname <span class="req">*</span></label>
@@ -567,7 +339,7 @@ input[type="date"] { cursor: pointer; color-scheme: dark; }
         <span class="field-hint">Pflichtfeld</span>
       </div>
     </div>
-    <div class="grid" style="gap:18px">
+    <div class="grid">
       <div class="field" id="fw-adresse">
         <label>Adresse <span class="req">*</span></label>
         <input id="adresse" type="text" placeholder="Musterstraße 12, 20095 Hamburg" autocomplete="street-address">
@@ -581,89 +353,63 @@ input[type="date"] { cursor: pointer; color-scheme: dark; }
     </div>
   </div>
 
+  <div class="divider"></div>
+
   <!-- Kaufdetails -->
   <div class="section">
-    <div class="section-head">
-      <div class="section-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
-      </div>
-      <div>
-        <div class="section-label">Kaufdetails</div>
-        <div class="section-desc">Gerät, Konfiguration &amp; Konditionen</div>
-      </div>
+    <div class="section-label">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      Kaufdetails
     </div>
-
-    <div class="grid" style="gap:18px">
+    <div class="grid" style="margin-bottom:18px">
       <div class="field" id="fw-artikel">
         <label>Artikel <span class="req">*</span></label>
         <input id="artikel" type="text" placeholder="z. B. ThinkPad X1 Carbon Gen 11">
         <span class="field-hint">Pflichtfeld</span>
       </div>
-
-      <div>
-        <div class="config-group-label">
-          Konfiguration <span class="opt">(optional)</span>
+      <div class="field">
+        <label>Konfiguration <span class="opt">(optional)</span></label>
+        <input id="cpu" type="text" placeholder="z. B. Intel Core i7-1365U" style="margin-top:2px">
+        <div class="grid cols-2" style="gap:10px; margin-top:10px">
+          <input id="ram" type="text" placeholder="z. B. 16 GB RAM">
+          <input id="massenspeicher" type="text" placeholder="z. B. 512 GB SSD">
         </div>
-        <div class="config-group">
-          <input id="cpu" type="text" placeholder="Prozessor – z. B. Intel Core i7-1365U">
-          <div class="grid cols-2" style="gap:10px">
-            <input id="ram" type="text" placeholder="RAM – z. B. 16 GB">
-            <input id="massenspeicher" type="text" placeholder="Speicher – z. B. 512 GB SSD">
-          </div>
-          <input id="gpu" type="text" placeholder="Grafik – z. B. NVIDIA RTX 4060">
-        </div>
+        <input id="gpu" type="text" placeholder="z. B. NVIDIA RTX 4060" style="margin-top:10px">
       </div>
-
-      <div class="grid cols-2">
-        <div class="field">
-          <label>Seriennummer <span class="opt">(optional)</span></label>
-          <input id="seriennummer" type="text" placeholder="z. B. PF4HLXE7">
-        </div>
-        <div class="field">
-          <label>Extras <span class="opt">(optional)</span></label>
-          <input id="extras" type="text" placeholder="z. B. Tasche, Maus, Netzteil">
-        </div>
+      <div class="field">
+        <label>Seriennummer <span class="opt">(optional)</span></label>
+        <input id="seriennummer" type="text" placeholder="z. B. PF4HLXE7">
       </div>
-
-      <div class="grid cols-2">
-        <div class="field" id="fw-betrag">
-          <label>Betrag inkl. 19 % MwSt. <span class="req">*</span></label>
-          <input id="betrag" type="text" placeholder="z. B. 1.299,00 €">
-          <span class="field-hint">Pflichtfeld</span>
-        </div>
-        <div class="field" id="fw-datum">
-          <label>Datum <span class="req">*</span></label>
-          <input id="datum" type="date">
-          <span class="field-hint">Pflichtfeld</span>
-        </div>
+      <div class="field">
+        <label>Extras <span class="opt">(optional)</span></label>
+        <input id="extras" type="text" placeholder="z. B. Tasche, Maus, Netzteil">
+      </div>
+    </div>
+    <div class="grid cols-2">
+      <div class="field" id="fw-betrag">
+        <label>Betrag inkl. 19 % MwSt. <span class="req">*</span></label>
+        <input id="betrag" type="text" placeholder="z. B. 1.299,00 €">
+        <span class="field-hint">Pflichtfeld</span>
+      </div>
+      <div class="field" id="fw-datum">
+        <label>Datum <span class="req">*</span></label>
+        <input id="datum" type="date">
+        <span class="field-hint">Pflichtfeld</span>
       </div>
     </div>
   </div>
 
-  <!-- Actions -->
-  <div class="actions-bar">
-    <div class="actions-info">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      PDF wird erstellt &amp; automatisch per E-Mail versendet
-    </div>
-    <div class="actions-right">
-      <button class="btn-reset" onclick="resetForm()">Zurücksetzen</button>
-      <button class="btn-generate" id="btnGen" onclick="buildPDF()">
-        <div class="spinner"></div>
-        <span class="btn-text" style="display:flex;align-items:center;gap:8px">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          PDF herunterladen
-        </span>
-      </button>
-    </div>
+  <div class="actions">
+    <button class="btn-reset" onclick="resetForm()">Zurücksetzen</button>
+    <button class="btn-generate" id="btnGen" onclick="buildPDF()">
+      <div class="spinner"></div>
+      <span class="btn-text" style="display:flex;align-items:center;gap:7px">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        PDF herunterladen
+      </span>
+    </button>
   </div>
-
 </div>
-
-<p class="footer-note">
-  Notebook-Pro NPH GmbH &nbsp;·&nbsp; Eiffestraße 596, 20537 Hamburg<br>
-  Ust-IdNr: DE450639506 &nbsp;·&nbsp; Steuer-Nr: 43/747/04318
-</p>
 
 <div id="toast"></div>
 
@@ -693,7 +439,7 @@ function toast(msg, type = 'ok') {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.className = `show ${type}`;
-  setTimeout(() => { el.className = ''; }, 3800);
+  setTimeout(() => { el.className = ''; }, 3400);
 }
 
 // ── Validation ────────────────────────────────────────────────
@@ -763,103 +509,187 @@ async function buildPDF() {
     };
 
     const { PDFDocument, rgb, StandardFonts } = PDFLib;
+
     const pdfDoc = await PDFDocument.create();
     const page   = pdfDoc.addPage([595.32, 841.92]);
     const { width: W, height: H } = page.getSize();
+
     const helvetica     = await pdfDoc.embedFont(StandardFonts.Helvetica);
     const helveticaBold = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+
+    // helper: top-from-top → ReportLab y
     const y = top => H - top;
+
+    // colors
     const BLACK = rgb(0, 0, 0);
-    const TEAL  = rgb(0.337, 0.710, 0.710);
-    const TX = 56.664, TW = 481.896, LABEL_W = 145, LINE_T = 0.7;
+    const TEAL  = rgb(0.337, 0.710, 0.710);  // #56b5b5
+
+    // ── Table drawing helpers ──────────────────────────────────
+    const TX = 56.664;                // table left x
+    const TW = 481.896;              // table width
+    const LABEL_W = 145;             // label column width
+    const LINE_T = 0.7;              // border thickness
 
     function drawTableRow(topY, h, label, value, twoLineLabel) {
-      const bx = TX, by = y(topY + h);
+      const bx = TX;
+      const by = y(topY + h);
+      // outer rect border
       page.drawRectangle({ x: bx, y: by, width: TW, height: h, borderColor: BLACK, borderWidth: LINE_T, color: rgb(1,1,1) });
+      // vertical divider
       page.drawLine({ start: { x: bx + LABEL_W, y: by }, end: { x: bx + LABEL_W, y: by + h }, thickness: LINE_T, color: BLACK });
+      // label
       if (twoLineLabel) {
         page.drawText(twoLineLabel[0], { x: bx + 10, y: y(topY + h/2 - 2), font: helveticaBold, size: 11, color: BLACK });
         page.drawText(twoLineLabel[1], { x: bx + 10, y: y(topY + h/2 + 14), font: helveticaBold, size: 11, color: BLACK });
       } else if (label) {
         page.drawText(label, { x: bx + 10, y: y(topY + h/2 + 6), font: helveticaBold, size: 11, color: BLACK });
       }
-      if (value) page.drawText(value, { x: bx + LABEL_W + 12, y: y(topY + h/2 + 6), font: helvetica, size: 11, color: BLACK });
+      // value
+      if (value) {
+        page.drawText(value, { x: bx + LABEL_W + 12, y: y(topY + h/2 + 6), font: helvetica, size: 11, color: BLACK });
+      }
     }
 
-    // Logo
-    const logoW=220,logoH=38,logoX=TX+TW-logoW,logoTopY=45,logoRad=logoH/2;
-    page.drawRectangle({ x: logoX+logoRad, y: y(logoTopY+logoH), width: logoW-logoH, height: logoH, color: TEAL });
-    page.drawEllipse({ x: logoX+logoRad, y: y(logoTopY+logoRad), xScale: logoRad, yScale: logoRad, color: TEAL });
-    page.drawEllipse({ x: logoX+logoW-logoRad, y: y(logoTopY+logoRad), xScale: logoRad, yScale: logoRad, color: TEAL });
-    page.drawText('Notebook-Pro', { x: logoX+28, y: y(logoTopY+27), font: helvetica, size: 20, color: rgb(1,1,1) });
-    page.drawText('die besten Notebooks für Sie', { x: logoX+18, y: y(logoTopY+logoH+16), font: helvetica, size: 9, color: BLACK });
+    // ── LOGO BAR ───────────────────────────────────────────────
+    // Teal rounded rectangle with "Notebook-Pro" text
+    const logoW = 220;
+    const logoH = 38;
+    const logoX = TX + TW - logoW;
+    const logoTopY = 45;
+    // Draw rounded rect (approximate with rectangle + circles at ends)
+    const logoRad = logoH / 2;
+    // Main rect body
+    page.drawRectangle({ x: logoX + logoRad, y: y(logoTopY + logoH), width: logoW - logoH, height: logoH, color: TEAL });
+    // Left cap
+    page.drawEllipse({ x: logoX + logoRad, y: y(logoTopY + logoRad), xScale: logoRad, yScale: logoRad, color: TEAL });
+    // Right cap
+    page.drawEllipse({ x: logoX + logoW - logoRad, y: y(logoTopY + logoRad), xScale: logoRad, yScale: logoRad, color: TEAL });
+    // Logo text
+    page.drawText('Notebook-Pro', { x: logoX + 28, y: y(logoTopY + 27), font: helvetica, size: 20, color: rgb(1,1,1) });
+    // Subtitle
+    page.drawText('die besten Notebooks für Sie', { x: logoX + 18, y: y(logoTopY + logoH + 16), font: helvetica, size: 9, color: BLACK });
 
-    const titleText='Kaufbeleg';
-    const titleW=helveticaBold.widthOfTextAtSize(titleText,20);
+    // ── TITLE ───────────────────────────────────────────────────
+    const titleText = 'Kaufbeleg';
+    const titleW = helveticaBold.widthOfTextAtSize(titleText, 20);
     page.drawText(titleText, { x: TX, y: y(100), font: helveticaBold, size: 20, color: BLACK });
-    page.drawLine({ start:{x:TX,y:y(104)}, end:{x:TX+titleW,y:y(104)}, thickness:1.5, color:TEAL });
+    page.drawLine({ start: { x: TX, y: y(104) }, end: { x: TX + titleW, y: y(104) }, thickness: 1.5, color: TEAL });
 
-    ['Notebook-Pro NPH GmbH','Eiffestraße 596','20537 Hamburg','E-Mail: kundenservice@notebook-pro.de']
-      .forEach((line,i) => page.drawText(line, { x:TX, y:y(136+i*16), font:helvetica, size:10, color:BLACK }));
+    // ── SENDER BLOCK ────────────────────────────────────────────
+    const senderLines = [
+      'Notebook-Pro NPH GmbH',
+      'Eiffestraße 596',
+      '20537 Hamburg',
+      'E-Mail: kundenservice@notebook-pro.de',
+    ];
+    senderLines.forEach((line, i) => {
+      page.drawText(line, { x: TX, y: y(136 + i * 16), font: helvetica, size: 10, color: BLACK });
+    });
 
-    const ROW_H=48; let rowTop=218;
-    drawTableRow(rowTop,ROW_H,'Name:',`${d.vorname} ${d.nachname}`); rowTop+=ROW_H;
-    drawTableRow(rowTop,ROW_H,'Adresse:',d.adresse); rowTop+=ROW_H;
-    drawTableRow(rowTop,ROW_H,'Mailadresse:',d.mail); rowTop+=ROW_H;
-    rowTop+=16;
-    drawTableRow(rowTop,ROW_H+12,'Artikel:',d.artikel); rowTop+=ROW_H+12;
-    const konfig=[d.cpu,d.ram,d.massenspeicher,d.gpu].filter(Boolean).join(' / ');
-    if(konfig){ drawTableRow(rowTop,ROW_H,'Konfiguration:',konfig); rowTop+=ROW_H; }
-    if(d.seriennummer){ drawTableRow(rowTop,ROW_H,'Seriennummer:',d.seriennummer); rowTop+=ROW_H; }
-    if(d.extras){ drawTableRow(rowTop,ROW_H,'Extras:',d.extras); rowTop+=ROW_H; }
-    rowTop+=16;
-    drawTableRow(rowTop,ROW_H+10,null,d.betrag,['Betrag inkl. 19%','Mehrwertsteuer:']); rowTop+=ROW_H+10;
-    rowTop+=10;
-    drawTableRow(rowTop,ROW_H,'Datum:',d.datum); rowTop+=ROW_H;
+    // ── TABLE ROWS ─────────────────────────────────────────────
+    const ROW_H = 48;
+    let rowTop = 218;
 
-    const sepY=rowTop+28;
-    page.drawLine({ start:{x:TX,y:y(sepY)}, end:{x:TX+TW,y:y(sepY)}, thickness:1, color:TEAL });
+    // Fixed rows
+    drawTableRow(rowTop, ROW_H, 'Name:', `${d.vorname} ${d.nachname}`);
+    rowTop += ROW_H;
+    drawTableRow(rowTop, ROW_H, 'Adresse:', d.adresse);
+    rowTop += ROW_H;
+    drawTableRow(rowTop, ROW_H, 'Mailadresse:', d.mail);
+    rowTop += ROW_H;
 
-    const lFS=8.5,lL=12; let lY=sepY+20;
-    page.drawText('Auf alle funktionierenden Geräte gibt es die ',{x:TX,y:y(lY),font:helvetica,size:lFS,color:BLACK});
-    const p1bx=TX+helvetica.widthOfTextAtSize('Auf alle funktionierenden Geräte gibt es die ',lFS);
-    page.drawText('gesetzliche Gewährleistung von 12 Monaten für private',{x:p1bx,y:y(lY),font:helveticaBold,size:lFS,color:BLACK});
-    lY+=lL;
-    page.drawText('KäuferInnen',{x:TX,y:y(lY),font:helveticaBold,size:lFS,color:BLACK});
-    const p1b2x=TX+helveticaBold.widthOfTextAtSize('KäuferInnen',lFS);
-    page.drawText(', gewerbliche Bestellungen sind hiervon ausgenommen.',{x:p1b2x,y:y(lY),font:helvetica,size:lFS,color:BLACK});
-    lY+=lL*2;
-    page.drawText('Akkus sind von der Gewährleistung ausgeschlossen und verstehen sich als kostenlose Zugabe,',{x:TX,y:y(lY),font:helveticaBold,size:lFS,color:BLACK});
-    lY+=lL;
-    page.drawText('genauso wie Software.',{x:TX,y:y(lY),font:helveticaBold,size:lFS,color:BLACK});
-    lY+=lL*2;
-    page.drawText('Bei Vor-Ort-Käufen besteht kein gesetzliches Rückgabe- oder Widerrufsrecht. Eine Rückgabe',{x:TX,y:y(lY),font:helveticaBold,size:lFS,color:BLACK});
-    lY+=lL;
-    page.drawText('aufgrund von Nichtgefallen oder nachträglicher Umentscheidung ist ausgeschlossen.',{x:TX,y:y(lY),font:helveticaBold,size:lFS,color:BLACK});
+    // Spacer before Artikel
+    rowTop += 16;
+    drawTableRow(rowTop, ROW_H + 12, 'Artikel:', d.artikel);
+    rowTop += ROW_H + 12;
 
-    const fT=lY+28;
-    page.drawLine({start:{x:TX,y:y(fT)},end:{x:TX+TW,y:y(fT)},thickness:1,color:TEAL});
-    page.drawText('Notebook-Pro NPH GmbH',{x:TX,y:y(fT+20),font:helvetica,size:10,color:BLACK});
-    page.drawText('Eiffestrasse 596',{x:TX,y:y(fT+34),font:helvetica,size:10,color:BLACK});
-    page.drawText('20537 Hamburg',{x:TX,y:y(fT+48),font:helvetica,size:10,color:BLACK});
-    page.drawText('Ust-IdNr: DE450639506',{x:280,y:y(fT+20),font:helvetica,size:8,color:BLACK});
-    page.drawText('Steuer-Nr: 43/747/04318',{x:280,y:y(fT+34),font:helvetica,size:8,color:BLACK});
+    // Konfiguration (optional)
+    const konfig = [d.cpu, d.ram, d.massenspeicher, d.gpu].filter(Boolean).join(' / ');
+    if (konfig) {
+      drawTableRow(rowTop, ROW_H, 'Konfiguration:', konfig);
+      rowTop += ROW_H;
+    }
 
-    // Download
+    // Seriennummer (optional)
+    if (d.seriennummer) {
+      drawTableRow(rowTop, ROW_H, 'Seriennummer:', d.seriennummer);
+      rowTop += ROW_H;
+    }
+
+    // Extras (optional)
+    if (d.extras) {
+      drawTableRow(rowTop, ROW_H, 'Extras:', d.extras);
+      rowTop += ROW_H;
+    }
+
+    // Spacer before Betrag
+    rowTop += 16;
+    drawTableRow(rowTop, ROW_H + 10, null, d.betrag, ['Betrag inkl. 19%', 'Mehrwertsteuer:']);
+    rowTop += ROW_H + 10;
+
+    // Datum
+    rowTop += 10;
+    drawTableRow(rowTop, ROW_H, 'Datum:', d.datum);
+    rowTop += ROW_H;
+
+    // ── SEPARATOR ───────────────────────────────────────────────
+    const sepY = rowTop + 28;
+    page.drawLine({ start: { x: TX, y: y(sepY) }, end: { x: TX + TW, y: y(sepY) }, thickness: 1, color: TEAL });
+
+    // ── LEGAL TEXT (with bold segments) ─────────────────────────
+    const legalStart = sepY + 20;
+    const legalFontSize = 8.5;
+    const legalLeading = 12;
+
+    // Paragraph 1
+    let lY = legalStart;
+    page.drawText('Auf alle funktionierenden Geräte gibt es die ', { x: TX, y: y(lY), font: helvetica, size: legalFontSize, color: BLACK });
+    const p1bx = TX + helvetica.widthOfTextAtSize('Auf alle funktionierenden Geräte gibt es die ', legalFontSize);
+    page.drawText('gesetzliche Gewährleistung von 12 Monaten für private', { x: p1bx, y: y(lY), font: helveticaBold, size: legalFontSize, color: BLACK });
+    lY += legalLeading;
+    page.drawText('KäuferInnen', { x: TX, y: y(lY), font: helveticaBold, size: legalFontSize, color: BLACK });
+    const p1b2x = TX + helveticaBold.widthOfTextAtSize('KäuferInnen', legalFontSize);
+    page.drawText(', gewerbliche Bestellungen sind hiervon ausgenommen.', { x: p1b2x, y: y(lY), font: helvetica, size: legalFontSize, color: BLACK });
+
+    // Paragraph 2
+    lY += legalLeading * 2;
+    page.drawText('Akkus sind von der Gewährleistung ausgeschlossen und verstehen sich als kostenlose Zugabe,', { x: TX, y: y(lY), font: helveticaBold, size: legalFontSize, color: BLACK });
+    lY += legalLeading;
+    page.drawText('genauso wie Software.', { x: TX, y: y(lY), font: helveticaBold, size: legalFontSize, color: BLACK });
+
+    // Paragraph 3
+    lY += legalLeading * 2;
+    page.drawText('Bei Vor-Ort-Käufen besteht kein gesetzliches Rückgabe- oder Widerrufsrecht. Eine Rückgabe', { x: TX, y: y(lY), font: helveticaBold, size: legalFontSize, color: BLACK });
+    lY += legalLeading;
+    page.drawText('aufgrund von Nichtgefallen oder nachträglicher Umentscheidung ist ausgeschlossen.', { x: TX, y: y(lY), font: helveticaBold, size: legalFontSize, color: BLACK });
+
+    // ── FOOTER ──────────────────────────────────────────────────
+    const footerTop = lY + 28;
+    page.drawLine({ start: { x: TX, y: y(footerTop) }, end: { x: TX + TW, y: y(footerTop) }, thickness: 1, color: TEAL });
+
+    page.drawText('Notebook-Pro NPH GmbH', { x: TX, y: y(footerTop + 20), font: helvetica, size: 10, color: BLACK });
+    page.drawText('Eiffestrasse 596',       { x: TX, y: y(footerTop + 34), font: helvetica, size: 10, color: BLACK });
+    page.drawText('20537 Hamburg',          { x: TX, y: y(footerTop + 48), font: helvetica, size: 10, color: BLACK });
+
+    page.drawText('Ust-IdNr: DE450639506',   { x: 280, y: y(footerTop + 20), font: helvetica, size: 8, color: BLACK });
+    page.drawText('Steuer-Nr: 43/747/04318', { x: 280, y: y(footerTop + 34), font: helvetica, size: 8, color: BLACK });
+
+    // ── SAVE & DOWNLOAD ─────────────────────────────────────────
     const pdfBytes = await pdfDoc.save();
-    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href = url;
-    a.download = `Kaufbeleg_${d.nachname}_${d.datum.replace(/\./g,'-')}.pdf`;
-    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    const blob     = new Blob([pdfBytes], { type: 'application/pdf' });
+    const url      = URL.createObjectURL(blob);
+    const a        = document.createElement('a');
+    a.href         = url;
+    a.download     = `Kaufbeleg_${d.nachname}_${d.datum.replace(/\./g, '-')}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
     setTimeout(() => URL.revokeObjectURL(url), 5000);
 
     // ── PDF zu file.io hochladen & Link per E-Mail senden ────────
     try {
-      const dateiname = `Kaufbeleg_${d.nachname}_${d.datum.replace(/\./g,'-')}.pdf`;
+      const dateiname = `Kaufbeleg_${d.nachname}_${d.datum.replace(/\./g, '-')}.pdf`;
 
-      // 1) PDF hochladen
       toast('⏳ PDF wird hochgeladen…', 'ok');
       const formData = new FormData();
       formData.append('file', new Blob([pdfBytes], { type: 'application/pdf' }), dateiname);
@@ -872,9 +702,6 @@ async function buildPDF() {
         throw new Error('Upload fehlgeschlagen: ' + (uploadData.message || 'Unbekannter Fehler'));
       }
 
-      const pdfLink = uploadData.link;
-
-      // 2) E-Mail mit Download-Link versenden
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
         to_email:   EMPFAENGER_EMAIL,
         kunde_name: `${d.vorname} ${d.nachname}`,
@@ -882,7 +709,7 @@ async function buildPDF() {
         betrag:     d.betrag,
         datum:      d.datum,
         pdf_name:   dateiname,
-        pdf_link:   pdfLink,
+        pdf_link:   uploadData.link,
       });
 
       toast('✓ PDF erstellt & E-Mail versendet!', 'ok');
@@ -899,6 +726,24 @@ async function buildPDF() {
     btn.disabled = false;
   }
 }
+
+// ── Theme toggle ─────────────────────────────────────────────
+function toggleTheme() {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  const theme = isDark ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', theme);
+  document.getElementById('themeSwitch').classList.toggle('active', !isDark);
+  localStorage.setItem('theme', theme);
+}
+
+// Restore saved theme
+(function() {
+  const saved = localStorage.getItem('theme') || 'light';
+  if (saved === 'dark') {
+    document.documentElement.setAttribute('data-theme', 'dark');
+    document.getElementById('themeSwitch').classList.add('active');
+  }
+})();
 </script>
 </body>
 </html>
